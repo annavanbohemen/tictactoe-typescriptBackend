@@ -3,15 +3,15 @@ import { BaseEntity } from 'typeorm/repository/BaseEntity'
 import { IsString } from 'class-validator'
 
 const startBoard = [
-	['o', 'o', 'o'],
-	['o', 'o', 'o'],
-	['o', 'o', 'o']
+	["o", "o", "o"],
+	["o", "o", "o"],
+	["o", "o", "o"]
 ]
 
 export type Board = [
-	['o', 'o', 'o'],
-	['o', 'o', 'o'],
-	['o', 'o', 'o']
+	["o", "o", "o"],
+	["o", "o", "o"],
+	["o", "o", "o"]
 ]
 export type Color = 'red' | 'blue' | 'green' | 'yellow' | 'magenta'
 

@@ -13,9 +13,9 @@ const typeorm_1 = require("typeorm");
 const BaseEntity_1 = require("typeorm/repository/BaseEntity");
 const class_validator_1 = require("class-validator");
 const startBoard = [
-    ['o', 'o', 'o'],
-    ['o', 'o', 'o'],
-    ['o', 'o', 'o']
+    ["o", "o", "o"],
+    ["o", "o", "o"],
+    ["o", "o", "o"]
 ];
 let Game = class Game extends BaseEntity_1.BaseEntity {
 };

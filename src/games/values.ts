@@ -1,6 +1,7 @@
-import { Color } from "./entity";
+import { Color, Board } from "./entity";
 
-export const moves = (board1, board2) => 
+
+export const moves = (board1: Board, board2: Board) => 
                 board1
                     .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
                     .reduce((a, b) => a.concat(b))

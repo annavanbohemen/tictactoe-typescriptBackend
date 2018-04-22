@@ -32,9 +32,13 @@ let GameController = class GameController {
         const game = await entity_1.default.findOne(id);
         if (!game)
             throw new routing_controllers_1.NotFoundError('Cannot find game');
-        if (!values_1.moves(game.board, update.board))
+        console.log(`update` + game.board);
+        if (!values_1.moves(game.board, update.board)) {
             throw new routing_controllers_1.BadRequestError(`Invalid move`);
-        return entity_1.default.merge(game, update).save();
+        }
+        game.board = update.board;
+        await game.save();
+        return game;
     }
 };
 __decorate([

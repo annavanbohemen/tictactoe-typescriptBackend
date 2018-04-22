@@ -45,9 +45,15 @@ red, blue, green, yellow, magenta. So every new game that gets created is assign
             const game = await Game.findOne(id)
             if (!game) throw new NotFoundError('Cannot find game')
 
-          if (!moves(game.board, update.board)) throw new BadRequestError(`Invalid move`)
-
-        return Game.merge(game, update).save()
+            console.log(`update` + game.board)
+            if (!moves(game.board, update.board)){
+                throw new BadRequestError(`Invalid move`)
+            }
+ 
+            game.board = update.board
+            await game.save()
+            return game
+          
 }
 
 
