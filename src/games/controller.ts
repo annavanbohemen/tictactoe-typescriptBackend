@@ -1,6 +1,7 @@
-import { JsonController, Get, Param, Post, Put, HttpCode, Body, NotFoundError, BodyParam, BadRequestError } from 'routing-controllers'
+import { JsonController, Get, Param, Post, Put, HttpCode, Body, NotFoundError, BadRequestError } from 'routing-controllers'
 import Game, { Color, Board } from './entity'
 import { moves, chooseRandomColor } from './values';
+import { validate } from 'class-validator';
 
 
 @JsonController()
@@ -42,18 +43,24 @@ red, blue, green, yellow, magenta. So every new game that gets created is assign
         @Param('id') id: number,
         @Body() update: {'color': Color, 'name': 'new name', 'board': Board} 
 ) {
-            const game = await Game.findOne(id)
+            let game = await Game.findOne(id)
             if (!game) throw new NotFoundError('Cannot find game')
-
-            console.log(`update` + game.board)
-            if (!moves(game.board, update.board)){
+            
+            if (update.board && moves(game.board, update.board) > 1){
                 throw new BadRequestError(`Invalid move`)
             }
- 
-            game.board = update.board
-            await game.save()
-            return game
-          
+            
+            Game.merge(game, update)
+
+            const validatedGame = validate(game).then(errors => { 
+                if (errors.length > 0) {
+                    throw new BadRequestError(`validation failed. errors: ${errors}`)
+                } else {
+                    game!.save()
+                    return game
+                }
+            })
+            return validatedGame
 }
 
 

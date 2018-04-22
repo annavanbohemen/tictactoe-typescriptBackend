@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const routing_controllers_1 = require("routing-controllers");
 const entity_1 = require("./entity");
 const values_1 = require("./values");
+const class_validator_1 = require("class-validator");
 let GameController = class GameController {
     getGame(id) {
         return entity_1.default.findOne(id);
@@ -29,16 +30,23 @@ let GameController = class GameController {
         return { gamecreated };
     }
     async updateGame(id, update) {
-        const game = await entity_1.default.findOne(id);
+        let game = await entity_1.default.findOne(id);
         if (!game)
             throw new routing_controllers_1.NotFoundError('Cannot find game');
-        console.log(`update` + game.board);
-        if (!values_1.moves(game.board, update.board)) {
+        if (update.board && values_1.moves(game.board, update.board) > 1) {
             throw new routing_controllers_1.BadRequestError(`Invalid move`);
         }
-        game.board = update.board;
-        await game.save();
-        return game;
+        entity_1.default.merge(game, update);
+        const validatedGame = class_validator_1.validate(game).then(errors => {
+            if (errors.length > 0) {
+                throw new routing_controllers_1.BadRequestError(`validation failed. errors: ${errors}`);
+            }
+            else {
+                game.save();
+                return game;
+            }
+        });
+        return validatedGame;
     }
 };
 __decorate([

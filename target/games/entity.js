@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const BaseEntity_1 = require("typeorm/repository/BaseEntity");
 const class_validator_1 = require("class-validator");
+const values_1 = require("./values");
 const startBoard = [
     ["o", "o", "o"],
     ["o", "o", "o"],
@@ -30,10 +31,12 @@ __decorate([
 ], Game.prototype, "name", void 0);
 __decorate([
     class_validator_1.IsString(),
+    class_validator_1.IsIn(values_1.colorChoices),
     typeorm_1.Column('text'),
     __metadata("design:type", String)
 ], Game.prototype, "color", void 0);
 __decorate([
+    class_validator_1.ValidateNested(),
     typeorm_1.Column('json', { default: startBoard }),
     __metadata("design:type", Array)
 ], Game.prototype, "board", void 0);
